@@ -195,10 +195,13 @@ class _CartScreenState extends State<CartScreen> {
                   height: 50,
                   child: ElevatedButton(
                     onPressed: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Checkout not implemented yet!'),
-                          duration: Duration(seconds: 2),
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => DetailScreen(
+                            total: totalPrice,
+                            items: widget.cartItems,
+                          ),
                         ),
                       );
                     },
@@ -219,6 +222,149 @@ class _CartScreenState extends State<CartScreen> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// 🟠 Updated Detail Screen
+class DetailScreen extends StatelessWidget {
+  final double total;
+  final List<Coffee> items;
+
+  const DetailScreen({super.key, required this.total, required this.items});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF2A2A2A),
+        elevation: 0,
+        title: const Text(
+          "Order Details",
+          style: TextStyle(color: Colors.white),
+        ),
+        iconTheme: const IconThemeData(color: Colors.white),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            /// Delivery Address
+            const Text(
+              "Delivery Address",
+              style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
+            ),
+            const SizedBox(height: 8),
+            const Text(
+              "Jl. Kgp Sutoyo, Bilzen, Tanjungbalai",
+              style: TextStyle(color: Colors.white70),
+            ),
+            const SizedBox(height: 20),
+
+            /// Order Items
+            Expanded(
+              child: ListView.builder(
+                itemCount: items.length,
+                itemBuilder: (context, index) {
+                  return Container(
+                    margin: const EdgeInsets.only(bottom: 12),
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF2A2A2A),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Row(
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Image.asset(
+                            items[index].image,
+                            width: 60,
+                            height: 60,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            items[index].name,
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 16),
+                          ),
+                        ),
+                        Text(
+                          "\$${items[index].price.toStringAsFixed(2)}",
+                          style: const TextStyle(
+                              color: Colors.white70,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
+
+            /// Payment Summary
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  "Total",
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+                Text(
+                  "\$${total.toStringAsFixed(2)}",
+                  style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.orange),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+
+            /// Order Button
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text("✅ Order Successful!"),
+                      duration: Duration(seconds: 2),
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFFFF8C42),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+                child: const Text(
+                  "Place Order",
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

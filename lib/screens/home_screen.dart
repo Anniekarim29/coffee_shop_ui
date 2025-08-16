@@ -3,7 +3,7 @@ import 'package:shimmer/shimmer.dart';
 import 'product_details_screen.dart';
 import '../models/coffee_model.dart';
 import 'cart_screen.dart';
-import 'profile_screen.dart'; // ✅ Import your profile screen
+import 'profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -19,7 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Coffee> cartItems = []; // Cart list
 
   final List<String> categories = [
-    'Espresso',
+    'All Coffee',
     'Cold brew',
     'Cappuccino',
     'Latte'
@@ -96,6 +96,34 @@ class _HomeScreenState extends State<HomeScreen> {
       price: 4.80,
       originalPrice: 6.50,
       image: 'assets/images/image2.jpg',
+    ),
+  ];
+
+  // 🔥 New Recommended Products
+  final List<Coffee> recommended = [
+    Coffee(
+      name: 'Flat White',
+      price: 6.40,
+      rating: 4.7,
+      image: 'assets/images/rec1.jpg',
+      description: 'A perfect balance of espresso and steamed milk.',
+      brewingSteps: [],
+    ),
+    Coffee(
+      name: 'Macchiato',
+      price: 5.90,
+      rating: 4.6,
+      image: 'assets/images/rec2.jpg',
+      description: 'Espresso topped with a dollop of milk foam.',
+      brewingSteps: [],
+    ),
+    Coffee(
+      name: 'Iced Americano',
+      price: 4.99,
+      rating: 4.5,
+      image: 'assets/images/rec3.jpg',
+      description: 'Refreshing iced coffee to keep you cool.',
+      brewingSteps: [],
     ),
   ];
 
@@ -300,6 +328,34 @@ class _HomeScreenState extends State<HomeScreen> {
                   itemCount: specialOffers.length,
                   itemBuilder: (context, index) {
                     return _buildSpecialOfferCard(specialOffers[index]);
+                  },
+                ),
+              ),
+
+              const SizedBox(height: 25),
+
+              // 🔥 Recommended For You
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Text(
+                  'Recommended For You',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 15),
+
+              SizedBox(
+                height: 280,
+                child: ListView.builder(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  scrollDirection: Axis.horizontal,
+                  itemCount: recommended.length,
+                  itemBuilder: (context, index) {
+                    return _buildCoffeeCard(recommended[index]);
                   },
                 ),
               ),
@@ -581,4 +637,18 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Icon(icon, color: isSelected ? Colors.white : Colors.white54, size: 24),
     );
   }
+}
+
+class SpecialOffer {
+  final String name;
+  final double price;
+  final double originalPrice;
+  final String image;
+
+  SpecialOffer({
+    required this.name,
+    required this.price,
+    required this.originalPrice,
+    required this.image,
+  });
 }
